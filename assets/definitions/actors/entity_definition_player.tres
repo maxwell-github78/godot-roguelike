@@ -1,10 +1,10 @@
 [gd_resource type="Resource" script_class="EntityDefinition" format=3 uid="uid://dgfxhlyp3il4s"]
 
 [ext_resource type="Script" uid="uid://g2m5qy2gksda" path="res://Entities/entity_definition.gd" id="1_u0axm"]
-[ext_resource type="Texture2D" uid="uid://bmum36y8kcgjn" path="res://assets/textures/monochrome_packed.png" id="2_qsoc5"]
+[ext_resource type="Texture2D" uid="uid://bcfbo13ysimwg" path="res://assets/textures/colored_packed.png" id="2_u0axm"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_8yuns"]
-atlas = ExtResource("2_qsoc5")
+atlas = ExtResource("2_u0axm")
 region = Rect2(400, 0, 16, 16)
 
 [resource]

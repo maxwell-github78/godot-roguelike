@@ -74,7 +74,7 @@ func generate_dungeon() -> MapData:
 					var wall_index := _rng.randi_range(0, max(0, len(walls) - 1))
 					var definition := walls[wall_index]
 					_carve_room_walls(dungeon, candidate_room, definition)
-					_carve_tile(dungeon, candidate_mark.position.x, candidate_mark.position.y, dungeon.tile_types.debug)
+					_carve_tile(dungeon, candidate_mark.position.x, candidate_mark.position.y, dungeon.tile_types.door)
 					features += 1
 					#for debug in candidate_room.marks:
 						#_carve_tile(dungeon, debug.position.x, debug.position.y, dungeon.tile_types.debug)
@@ -133,8 +133,15 @@ func _carve_room(dungeon: MapData, room: Room) -> bool:
 	return true
 
 func _carve_room_walls(dungeon: MapData, room: Room, type: TileDefinition):
+	var ineditable: Array[TileDefinition] = [
+		dungeon.tile_types.floor, 
+		dungeon.tile_types.debug,
+		dungeon.tile_types.door
+		]
+	var current: TileDefinition
 	for vector in room.tiles_to_wall:
-		if dungeon.get_tile(vector).get_tile_type() != dungeon.tile_types.floor:
+		current = dungeon.get_tile(vector).get_tile_type()
+		if not current in ineditable:
 			_carve_tile(dungeon, vector.x, vector.y, type)
 	
 

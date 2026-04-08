@@ -4,7 +4,9 @@
 [ext_resource type="Script" uid="uid://b2221nolllmit" path="res://Map/map.gd" id="2_7raqb"]
 [ext_resource type="Script" uid="uid://bhdudjg8jexxr" path="res://Game/event_handler.gd" id="3_7raqb"]
 [ext_resource type="Script" uid="uid://c5mfpchya1hfk" path="res://Map/dungeon_generator.gd" id="4_jcm6v"]
+[ext_resource type="Script" uid="uid://l6mwn3et1kcx" path="res://Map/field_of_view.gd" id="4_qmv3x"]
 [ext_resource type="Script" uid="uid://cmxktajhpw02w" path="res://Game/camera.gd" id="5_fwxkx"]
+[ext_resource type="Script" uid="uid://qlbb8spipex" path="res://Game/debug.gd" id="7_oomkl"]
 
 [node name="Game" type="Node2D" unique_id=1953761449]
 script = ExtResource("1_bk3v5")
@@ -14,6 +16,9 @@ script = ExtResource("2_7raqb")
 
 [node name="DungeonGenerator" type="Node" parent="Map" unique_id=1998384909]
 script = ExtResource("4_jcm6v")
+
+[node name="FieldOfView" type="Node" parent="Map" unique_id=731902409]
+script = ExtResource("4_qmv3x")
 
 [node name="EventHandler" type="Node" parent="." unique_id=1280670172]
 script = ExtResource("3_7raqb")
@@ -25,3 +30,9 @@ zoom = Vector2(2, 2)
 script = ExtResource("5_fwxkx")
 follow_speed = 4.0
 zoom_speed = 0.25
+
+[node name="Debug" type="Node" parent="." unique_id=726445166]
+script = ExtResource("7_oomkl")
+all_lit = true
+
+[connection signal="light_debug_changed" from="Debug" to="Map" method="_on_debug_light_debug_changed"]
