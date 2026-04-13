@@ -33,6 +33,6 @@ zoom_speed = 0.25
 
 [node name="Debug" type="Node" parent="." unique_id=726445166]
 script = ExtResource("7_oomkl")
-all_lit = true
+default_all_lit = true
 
 [connection signal="light_debug_changed" from="Debug" to="Map" method="_on_debug_light_debug_changed"]

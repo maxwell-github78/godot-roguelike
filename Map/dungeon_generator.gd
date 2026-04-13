@@ -9,9 +9,8 @@ extends Node
 @export var rectangle_maximum: int = 10
 @export var cave_minimum: int = 10
 @export var cave_maximum: int = 40
-@export var corridor_minimum: int = 4
-@export var corridor_maximum: int = 8
-
+@export var round_minimum: int = 6
+@export var round_maximum: int = 12
 
 
 var dungeon_rect := Rect2i(0, 0, map_width, map_height)
@@ -19,20 +18,24 @@ var dungeon_rect := Rect2i(0, 0, map_width, map_height)
 var _rng := RandomNumberGenerator.new()
 var marks: Array[Mark]
 var feature_bounds: Array[Vector2i]
+var fixed: Array[Vector2i]
 
-var feature_weights := {
+const feature_weights := {
 	"rectangular": [0, 49],
-	"cave": [50, 99]
+	"cave": [50, 79],
+	"round": [80, 99],
+	
 }
 var feature_create_function := {
 	"rectangular": _random_room_rectangle,
 	"cave": _random_room_cave,
+	"round": _random_room_round,
 }
 
 
 
 func _ready() -> void:
-	_rng.seed = 487392543
+	#_rng.seed = 4738259
 	_rng.randomize()
 
 
@@ -44,14 +47,19 @@ func generate_dungeon() -> MapData:
 		]
 	var start := Mark.new()
 	start.position = Vector2i(map_width / 2, map_height / 2)
-	var start_room:= _random_room_rectangle(start)
+	var start_room:= _random_room_round(start)
+	start_room.walls()
+	#for debug in start_room.marks:
+		#_carve_tile(dungeon, debug.position.x, debug.position.y, dungeon.tile_types.debug)
 	marks += start_room.marks
 	_carve_room(dungeon, start_room)
+	_carve_room_walls(dungeon, start_room, dungeon.tile_types.wall_blue)
+		
 	var features: int = 0
 	var attempts: int = 0
 	var feature_type: String = "room"
 	while len(feature_bounds) < 0.55 * map_width * map_height and len(marks) > 0 and attempts < 5000:
-	#while features < 2:
+	#while features < 1 and attempts < 5000:
 		attempts += 1
 		var feature_number := _rng.randi_range(0, 99)
 		for key in feature_weights.keys():
@@ -62,8 +70,10 @@ func generate_dungeon() -> MapData:
 		var candidate_room = feature_create_function[feature_type].call(candidate_mark)
 		for mark in candidate_room.marks:
 			if mark.direction + candidate_mark.direction == Vector2i(0, 0):
-				var amount = candidate_room.rect.position - mark.position 
+				var new_spot: Vector2i = mark.position #+ mark.direction
+				var amount: Vector2i = candidate_room.rect.position - new_spot
 				candidate_room.rect.position += amount
+				new_spot += amount #- mark.direction
 				candidate_room.shift(amount)
 				candidate_room.init_marks()
 				var result = _carve_room(dungeon, candidate_room)
@@ -75,19 +85,24 @@ func generate_dungeon() -> MapData:
 					var definition := walls[wall_index]
 					_carve_room_walls(dungeon, candidate_room, definition)
 					_carve_tile(dungeon, candidate_mark.position.x, candidate_mark.position.y, dungeon.tile_types.door)
+					#_carve_tile(dungeon, new_spot.x, new_spot.y, dungeon.tile_types.floor)
+					fixed.append(new_spot)
+					fixed.append(new_spot + 1 * mark.direction)
 					features += 1
 					#for debug in candidate_room.marks:
 						#_carve_tile(dungeon, debug.position.x, debug.position.y, dungeon.tile_types.debug)
 
 					
 					
-	print(len(feature_bounds))
-	print(map_width * map_height)
-	print(attempts)
+	print("Tiles covered: ", len(feature_bounds))
+	print("Map area: ", map_width * map_height)
+	print("Attemps to place features: ", attempts)
 	return dungeon
 	
 func _carve_tile(dungeon: MapData, x: int, y: int, type: TileDefinition) -> bool:
 		var tile_position = Vector2i(x, y)
+		if tile_position in fixed:
+			return false
 		var tile: Tile = dungeon.get_tile(tile_position)
 		if not tile:
 			return false
@@ -115,11 +130,22 @@ func _random_room_cave(mark: Mark) -> Cave:
 	out.dig()
 	out.init_marks()
 	return out
+
+func _random_room_round(mark: Mark) -> Round:
+	var position := mark.position
+	var rect := Rect2i(position.x, position.y, 
+	_rng.randi_range(round_minimum, round_maximum),
+	 _rng.randi_range(round_minimum, round_maximum))
+	var out = Round.new(_rng)
+	out.rect = rect
+	out.dig()
+	out.init_marks()
+	return out
 	
 		
 func _carve_room(dungeon: MapData, room: Room) -> bool:
 	var working := room.rect.grow(-1)
-	if not _rect_inside_rect(room.rect, dungeon_rect):
+	if not _rect_inside_rect(room.rect.grow(1), dungeon_rect):
 		return false
 	
 	for vector in room.tiles_to_carve:
@@ -134,7 +160,7 @@ func _carve_room(dungeon: MapData, room: Room) -> bool:
 
 func _carve_room_walls(dungeon: MapData, room: Room, type: TileDefinition):
 	var ineditable: Array[TileDefinition] = [
-		dungeon.tile_types.floor, 
+		#dungeon.tile_types.floor, 
 		dungeon.tile_types.debug,
 		dungeon.tile_types.door
 		]

@@ -1,11 +1,11 @@
 [gd_resource type="Resource" script_class="TileDefinition" format=3 uid="uid://dnjltpqaso5ny"]
 
 [ext_resource type="Script" uid="uid://biqdguueu58bs" path="res://Map/tile_definition.gd" id="1_uolf4"]
-[ext_resource type="Texture2D" uid="uid://bcfbo13ysimwg" path="res://assets/textures/colored_packed.png" id="2_0nt7e"]
+[ext_resource type="Texture2D" uid="uid://cndehvpil7l60" path="res://assets/textures/colored-transparent_packed.png" id="2_0nt7e"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_le1h6"]
 atlas = ExtResource("2_0nt7e")
-region = Rect2(208, 256, 16, 16)
+region = Rect2(768, 208, 16, 16)
 
 [resource]
 script = ExtResource("1_uolf4")

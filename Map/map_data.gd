@@ -24,7 +24,7 @@ func _read_tile_definitions():
 		while file_name != "":
 			var file_path_string = dir_path_string + "/" + file_name
 			var key: String = file_name.replace(".tres", "")
-			print(key)
+			#print(key)
 			tile_types[key] = load(file_path_string)
 			file_name = dir.get_next()
 	else:
