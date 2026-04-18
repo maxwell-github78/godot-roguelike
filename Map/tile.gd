@@ -2,6 +2,8 @@ class_name Tile
 extends Sprite2D
 
 var _definition: TileDefinition
+var side: bool = false
+var has_side: bool = false
 
 var is_explored: bool = false:
 	set(value):
@@ -23,9 +25,15 @@ func _init(grid_position: Vector2i, tile_definition: TileDefinition) -> void:
 	position = Grid.grid_to_world(grid_position)
 	set_tile_type(tile_definition)
 	
+	
 func set_tile_type(tile_definition: TileDefinition) -> void:
 	_definition = tile_definition
-	texture = _definition.texture
+	texture = tile_definition.texture
+	has_side = tile_definition.has_side
+	
+func set_autotiling() -> void:
+	if side:
+		texture = _definition.side_texture
 	
 func get_tile_type() -> TileDefinition:
 	return _definition

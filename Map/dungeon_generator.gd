@@ -92,7 +92,7 @@ func generate_dungeon() -> MapData:
 					#for debug in candidate_room.marks:
 						#_carve_tile(dungeon, debug.position.x, debug.position.y, dungeon.tile_types.debug)
 
-					
+	autotile(dungeon)				
 					
 	print("Tiles covered: ", len(feature_bounds))
 	print("Map area: ", map_width * map_height)
@@ -180,7 +180,16 @@ func _rect_inside_rect(rect_small: Rect2i, rect_big: Rect2i) -> bool:
 		rect_big.has_point(Vector2i(rect_small.end.x, rect_small.position.y))
 	)
 
-	
+func autotile(dungeon: MapData):
+	for tile in dungeon.tiles:
+		if tile.has_side:
+			var grid_position := Grid.world_to_grid(tile.position)
+			if grid_position.y < map_height:
+				var origin = Vector2i(grid_position)
+				var under = dungeon.get_tile(origin + Vector2i(0, 1))
+				if under and (under.is_transparent() or under.is_walkable()):
+					tile.side = true
+					tile.set_autotiling()
 	
 	
 	

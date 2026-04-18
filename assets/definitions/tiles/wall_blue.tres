@@ -1,15 +1,21 @@
 [gd_resource type="Resource" script_class="TileDefinition" format=3 uid="uid://o21euij1k2dp"]
 
 [ext_resource type="Script" uid="uid://biqdguueu58bs" path="res://Map/tile_definition.gd" id="1_xyco6"]
-[ext_resource type="Texture2D" uid="uid://cndehvpil7l60" path="res://assets/textures/colored-transparent_packed.png" id="2_80qeq"]
+[ext_resource type="Texture2D" uid="uid://djxtqiuglbe8h" path="res://assets/textures/tileset-programmer.png" id="2_80qeq"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_80qeq"]
+atlas = ExtResource("2_80qeq")
+region = Rect2(16, 16, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_q0rvi"]
 atlas = ExtResource("2_80qeq")
-region = Rect2(112, 240, 16, 16)
+region = Rect2(16, 0, 16, 16)
 
 [resource]
 script = ExtResource("1_xyco6")
 texture = SubResource("AtlasTexture_q0rvi")
+side_texture = SubResource("AtlasTexture_80qeq")
+has_side = true
 is_walkable = false
 is_transparent = false
 metadata/_custom_type_script = "uid://biqdguueu58bs"
