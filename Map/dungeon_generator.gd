@@ -92,6 +92,7 @@ func generate_dungeon() -> MapData:
 					#for debug in candidate_room.marks:
 						#_carve_tile(dungeon, debug.position.x, debug.position.y, dungeon.tile_types.debug)
 
+	check_discoverability(dungeon)
 	autotile(dungeon)				
 					
 	print("Tiles covered: ", len(feature_bounds))
@@ -180,6 +181,22 @@ func _rect_inside_rect(rect_small: Rect2i, rect_big: Rect2i) -> bool:
 		rect_big.has_point(Vector2i(rect_small.end.x, rect_small.position.y))
 	)
 
+func check_discoverability(dungeon: MapData):
+	for tile in dungeon.tiles:
+		var origin := Vector2i(Grid.world_to_grid(tile.position))
+		tile.is_discoverable = discoverable(dungeon, origin)
+		
+func discoverable(dungeon: MapData, origin: Vector2i) -> bool:
+		for x in range(-1, 2):
+			for y in range(-1, 2):
+				if x != 0 and y != 0:
+					var candidate: Vector2i = origin + Vector2i(x, y)
+					if dungeon_rect.has_point(candidate):
+						var candidate_tile = dungeon.get_tile(candidate)
+						if candidate_tile.is_walkable():
+							return true
+		return false
+
 func autotile(dungeon: MapData):
 	for tile in dungeon.tiles:
 		if tile.has_side:
@@ -187,7 +204,7 @@ func autotile(dungeon: MapData):
 			if grid_position.y < map_height:
 				var origin = Vector2i(grid_position)
 				var under = dungeon.get_tile(origin + Vector2i(0, 1))
-				if under and (under.is_transparent() or under.is_walkable()):
+				if under and under.empty():
 					tile.side = true
 					tile.set_autotiling()
 	

@@ -4,6 +4,7 @@ extends Sprite2D
 var _definition: TileDefinition
 var side: bool = false
 var has_side: bool = false
+var is_discoverable: bool
 
 var is_explored: bool = false:
 	set(value):
@@ -34,6 +35,9 @@ func set_tile_type(tile_definition: TileDefinition) -> void:
 func set_autotiling() -> void:
 	if side:
 		texture = _definition.side_texture
+		
+func empty() -> bool:
+	return is_transparent() or is_walkable() or not is_discoverable
 	
 func get_tile_type() -> TileDefinition:
 	return _definition
