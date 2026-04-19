@@ -204,7 +204,7 @@ func autotile(dungeon: MapData):
 			if grid_position.y < map_height:
 				var origin = Vector2i(grid_position)
 				var under = dungeon.get_tile(origin + Vector2i(0, 1))
-				if under and under.empty():
+				if under and under.empty() and tile.is_discoverable:
 					tile.side = true
 					tile.set_autotiling()
 	
