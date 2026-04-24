@@ -11,6 +11,10 @@ extends Node
 @export var cave_maximum: int = 40
 @export var round_minimum: int = 6
 @export var round_maximum: int = 12
+@export var corridor_length_minimum: int = 8
+@export var corridor_length_maximum: int = 20
+@export var corridor_width_minimum: int = 3
+@export var corridor_width_maximum: int = 3
 
 
 var dungeon_rect := Rect2i(0, 0, map_width, map_height)
@@ -21,7 +25,8 @@ var feature_bounds: Array[Vector2i]
 var fixed: Array[Vector2i]
 
 const feature_weights := {
-	"rectangular": [0, 49],
+	"rectangular": [0,49],
+	#"corridor": [30, 59],
 	"cave": [50, 79],
 	"round": [80, 99],
 	
@@ -30,6 +35,7 @@ var feature_create_function := {
 	"rectangular": _random_room_rectangle,
 	"cave": _random_room_cave,
 	"round": _random_room_round,
+	"corridor": _random_room_corridor,
 }
 
 
@@ -138,6 +144,23 @@ func _random_room_round(mark: Mark) -> Round:
 	_rng.randi_range(round_minimum, round_maximum),
 	 _rng.randi_range(round_minimum, round_maximum))
 	var out = Round.new(_rng)
+	out.rect = rect
+	out.dig()
+	out.init_marks()
+	return out
+	
+func _random_room_corridor(mark: Mark):
+	var position := mark.position
+	var rect: Rect2i
+	if _rng.randi_range(0, 1) == 1:
+		rect = Rect2i(position.x, position.y, 
+		_rng.randi_range(corridor_width_minimum, corridor_width_maximum),
+		_rng.randi_range(corridor_length_minimum, corridor_length_maximum))
+	else:
+		rect = Rect2i(position.x, position.y, 
+		_rng.randi_range(corridor_length_minimum, corridor_length_maximum),
+		_rng.randi_range(corridor_width_minimum, corridor_width_maximum))
+	var out = Rectangular.new(_rng)
 	out.rect = rect
 	out.dig()
 	out.init_marks()
