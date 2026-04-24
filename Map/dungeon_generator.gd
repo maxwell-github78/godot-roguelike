@@ -93,6 +93,7 @@ func generate_dungeon() -> MapData:
 					_carve_tile(dungeon, candidate_mark.position.x, candidate_mark.position.y, dungeon.tile_types.door)
 					#_carve_tile(dungeon, new_spot.x, new_spot.y, dungeon.tile_types.floor)
 					fixed.append(new_spot)
+					fixed.append(new_spot - 1 * mark.direction)
 					fixed.append(new_spot + 1 * mark.direction)
 					features += 1
 					#for debug in candidate_room.marks:
