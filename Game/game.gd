@@ -11,7 +11,7 @@ const player_definition: EntityDefinition = preload("res://assets/definitions/ac
 
 func _ready() -> void:
 	Engine.max_fps = 60
-	player = Entity.new(Vector2i(42, 42), player_definition)
+	player = Entity.new(Vector2i(82, 82), player_definition)
 	remove_child(camera)
 	player.add_child(camera)
 	entities.add_child(player)

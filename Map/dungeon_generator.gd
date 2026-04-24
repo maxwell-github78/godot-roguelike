@@ -2,8 +2,8 @@ class_name DungeonGenerator
 extends Node
 
 @export_category("Map Dimensions")
-@export var map_width: int = 80
-@export var map_height: int = 80
+@export var map_width: int = 160
+@export var map_height: int = 160
 @export_category("Room Dimensions")
 @export var rectangle_minimum: int = 5
 @export var rectangle_maximum: int = 10
@@ -26,9 +26,9 @@ var fixed: Array[Vector2i]
 
 const feature_weights := {
 	"rectangular": [0,49],
-	#"corridor": [30, 59],
 	"cave": [50, 79],
 	"round": [80, 99],
+	#"corridor": [30, 59],
 	
 }
 var feature_create_function := {
@@ -64,7 +64,7 @@ func generate_dungeon() -> MapData:
 	var features: int = 0
 	var attempts: int = 0
 	var feature_type: String = "room"
-	while len(feature_bounds) < 0.55 * map_width * map_height and len(marks) > 0 and attempts < 5000:
+	while len(feature_bounds) < 0.30 * map_width * map_height and len(marks) > 0 and attempts < 5000:
 	#while features < 1 and attempts < 5000:
 		attempts += 1
 		var feature_number := _rng.randi_range(0, 99)
@@ -212,7 +212,7 @@ func check_discoverability(dungeon: MapData):
 func discoverable(dungeon: MapData, origin: Vector2i) -> bool:
 		for x in range(-1, 2):
 			for y in range(-1, 2):
-				if x != 0 and y != 0:
+				if x != 0 or y != 0:
 					var candidate: Vector2i = origin + Vector2i(x, y)
 					if dungeon_rect.has_point(candidate):
 						var candidate_tile = dungeon.get_tile(candidate)
