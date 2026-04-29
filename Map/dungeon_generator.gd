@@ -93,12 +93,16 @@ func generate_dungeon() -> MapData:
 					_carve_tile(dungeon, candidate_mark.position.x, candidate_mark.position.y, dungeon.tile_types.door)
 					#_carve_tile(dungeon, new_spot.x, new_spot.y, dungeon.tile_types.floor)
 					fixed.append(new_spot)
-					fixed.append(new_spot - 1 * mark.direction)
-					fixed.append(new_spot + 1 * mark.direction)
+					var front: Vector2i = new_spot + 1 * mark.direction
+					var back: Vector2i = new_spot - 1 * mark.direction
+					fixed.append(front)
+					fixed.append(back)
+					_carve_tile(dungeon, front.x, front.y, dungeon.tile_types.floor)
+					_carve_tile(dungeon, back.x, back.y, dungeon.tile_types.floor)
 					features += 1
 					#for debug in candidate_room.marks:
 						#_carve_tile(dungeon, debug.position.x, debug.position.y, dungeon.tile_types.debug)
-
+	
 	check_discoverability(dungeon)
 	autotile(dungeon)				
 					
