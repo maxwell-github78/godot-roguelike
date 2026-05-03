@@ -64,7 +64,7 @@ func generate_dungeon() -> MapData:
 	var features: int = 0
 	var attempts: int = 0
 	var feature_type: String = "room"
-	while len(feature_bounds) < 0.30 * map_width * map_height and len(marks) > 0 and attempts < 5000:
+	while len(feature_bounds) < 0.15 * map_width * map_height and len(marks) > 0 and attempts < 5000:
 	#while features < 1 and attempts < 5000:
 		attempts += 1
 		var feature_number := _rng.randi_range(0, 99)
