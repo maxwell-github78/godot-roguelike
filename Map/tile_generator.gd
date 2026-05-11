@@ -86,7 +86,13 @@ func generate(dungeon: MapData, in_rng: RandomNumberGenerator):
 					var wall_index := rng.randi_range(0, max(0, len(walls) - 1))
 					var definition := walls[wall_index]
 					_carve_room_walls(dungeon, candidate_room, definition)
-					_carve_tile(dungeon, candidate_mark.position.x, candidate_mark.position.y, dungeon.tile_types.door)
+					var portal: TileDefinition 
+					if rng.randf() > 0.7:
+						portal = dungeon.tile_types.door
+					else:
+						portal = dungeon.tile_types.floor
+					_carve_tile(dungeon, candidate_mark.position.x, candidate_mark.position.y, portal)
+	
 					#_carve_tile(dungeon, new_spot.x, new_spot.y, dungeon.tile_types.floor)
 					fixed.append(new_spot)
 					var front: Vector2i = new_spot + 1 * mark.direction

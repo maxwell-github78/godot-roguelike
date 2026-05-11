@@ -10,11 +10,13 @@ var tiles: Array[Tile]
 var entities: Array[Entity]
 var tile_types: Dictionary
 var floor_grid_positions: Array[Vector2i]
+var player_start_position: Vector2i 
 
 
 func _init(map_width: int, map_height: int) -> void:
 	width = map_width
 	height = map_height
+	player_start_position = Vector2i( width / 2 + 2, height / 2 + 2)
 	entities = []
 	tile_types = Files.read_definitions(dir_path_string)
 	_setup_tiles()

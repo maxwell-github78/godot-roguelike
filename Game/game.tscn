@@ -19,10 +19,10 @@ script = ExtResource("2_7raqb")
 [node name="DungeonGenerator" type="Node" parent="Map" unique_id=1998384909]
 script = ExtResource("4_jcm6v")
 
-[node name="TileGenerator" type="Node" parent="Map" unique_id=484676913]
+[node name="TileGenerator" type="Node" parent="Map/DungeonGenerator" unique_id=484676913]
 script = ExtResource("4_kul4i")
 
-[node name="EntityGenerator" type="Node" parent="Map" unique_id=1964684418]
+[node name="EntityGenerator" type="Node" parent="Map/DungeonGenerator" unique_id=1964684418]
 script = ExtResource("5_7gi1t")
 
 [node name="FieldOfView" type="Node" parent="Map" unique_id=731902409]
