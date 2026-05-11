@@ -2,22 +2,20 @@ class_name Game
 extends Node2D
 
 const player_definition: EntityDefinition = preload("res://assets/definitions/actors/entity_definition_player.tres")
-
+@onready var camera: Camera2D = $Camera2D
 @onready var player: Entity
 @onready var event_handler: EventHandler = $EventHandler
-@onready var entities: Node2D = $Entities
 @onready var map: Map = $Map
-@onready var camera: Camera2D = $Camera2D
 
 func _ready() -> void:
 	Engine.max_fps = 60
-	player = Entity.new(Vector2i(82, 82), player_definition)
+	player = Entity.new(Vector2i.ZERO, player_definition)
 	remove_child(camera)
 	player.add_child(camera)
-	entities.add_child(player)
+	map.generate(player)
 	map.update_fov(player.grid_position)
 	
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	var action: Action = event_handler.get_action()
 	if action:
 		var previous_player_position := player.grid_position

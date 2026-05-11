@@ -1,34 +1,23 @@
 class_name MapData
 extends RefCounted
 
-var tile_types: Dictionary = {}
-
 var dir_path_string: String = "res://assets/definitions/tiles"
-var dir := DirAccess.open(dir_path_string)
+
 
 var width: int
 var height: int
 var tiles: Array[Tile]
+var entities: Array[Entity]
+var tile_types: Dictionary
+var floor_grid_positions: Array[Vector2i]
 
 
 func _init(map_width: int, map_height: int) -> void:
 	width = map_width
 	height = map_height
-	_read_tile_definitions()
+	entities = []
+	tile_types = Files.read_definitions(dir_path_string)
 	_setup_tiles()
-	
-func _read_tile_definitions():
-	if dir:
-		dir.list_dir_begin()
-		var file_name = dir.get_next()
-		while file_name != "":
-			var file_path_string = dir_path_string + "/" + file_name
-			var key: String = file_name.replace(".tres", "")
-			#print(key)
-			tile_types[key] = load(file_path_string)
-			file_name = dir.get_next()
-	else:
-		print("An error occurred when trying to access the path to the tile definitions")
 
 func _setup_tiles() -> void:
 	tiles = []
@@ -37,7 +26,6 @@ func _setup_tiles() -> void:
 			var tile_position := Vector2i(x, y)
 			var tile := Tile.new(tile_position, tile_types.stone)
 			tiles.append(tile)
-
 
 func get_tile(grid_position: Vector2i) -> Tile:
 	var tile_index: int = grid_to_index(grid_position)
@@ -61,3 +49,9 @@ func is_in_bounds(coordinate: Vector2i) -> bool:
 		and 0 <= coordinate.y
 		and coordinate.y < height
 	)
+
+func get_blocking_entity_at_location(grid_position: Vector2i) -> Entity:
+	for entity in entities:
+		if entity.is_blocking_movement() and entity.grid_position == grid_position:
+			return entity
+	return null

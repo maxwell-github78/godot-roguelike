@@ -4,7 +4,9 @@
 [ext_resource type="Script" uid="uid://b2221nolllmit" path="res://Map/map.gd" id="2_7raqb"]
 [ext_resource type="Script" uid="uid://bhdudjg8jexxr" path="res://Game/event_handler.gd" id="3_7raqb"]
 [ext_resource type="Script" uid="uid://c5mfpchya1hfk" path="res://Map/dungeon_generator.gd" id="4_jcm6v"]
+[ext_resource type="Script" uid="uid://cv4gcne0coebp" path="res://Map/tile_generator.gd" id="4_kul4i"]
 [ext_resource type="Script" uid="uid://l6mwn3et1kcx" path="res://Map/field_of_view.gd" id="4_qmv3x"]
+[ext_resource type="Script" uid="uid://wvqlumws0uxm" path="res://Game/entity_generator.gd" id="5_7gi1t"]
 [ext_resource type="Script" uid="uid://cmxktajhpw02w" path="res://Game/camera.gd" id="5_fwxkx"]
 [ext_resource type="Script" uid="uid://qlbb8spipex" path="res://Game/debug.gd" id="7_oomkl"]
 
@@ -17,13 +19,21 @@ script = ExtResource("2_7raqb")
 [node name="DungeonGenerator" type="Node" parent="Map" unique_id=1998384909]
 script = ExtResource("4_jcm6v")
 
+[node name="TileGenerator" type="Node" parent="Map" unique_id=484676913]
+script = ExtResource("4_kul4i")
+
+[node name="EntityGenerator" type="Node" parent="Map" unique_id=1964684418]
+script = ExtResource("5_7gi1t")
+
 [node name="FieldOfView" type="Node" parent="Map" unique_id=731902409]
 script = ExtResource("4_qmv3x")
 
+[node name="Tiles" type="Node2D" parent="Map" unique_id=261080215]
+
+[node name="Entities" type="Node2D" parent="Map" unique_id=1005672856]
+
 [node name="EventHandler" type="Node" parent="." unique_id=1280670172]
 script = ExtResource("3_7raqb")
-
-[node name="Entities" type="Node2D" parent="." unique_id=1005672856]
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1378997935]
 zoom = Vector2(3, 3)

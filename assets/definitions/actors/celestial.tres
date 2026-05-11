@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="EntityDefinition" format=3 uid="uid://br4xct7j47xvt"]
+
+[ext_resource type="Script" uid="uid://g2m5qy2gksda" path="res://Entities/entity_definition.gd" id="1_w40yj"]
+[ext_resource type="Texture2D" uid="uid://cndehvpil7l60" path="res://assets/textures/colored-transparent_packed.png" id="2_pbkmr"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uhw10"]
+atlas = ExtResource("2_pbkmr")
+region = Rect2(496, 16, 16, 16)
+
+[resource]
+script = ExtResource("1_w40yj")
+name = "Celestial"
+texture = SubResource("AtlasTexture_uhw10")
+metadata/_custom_type_script = "uid://g2m5qy2gksda"

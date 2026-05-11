@@ -20,7 +20,7 @@ func get_action() -> Action:
 		var map: MapData = game.get_map_data()
 		var grid_position: Vector2i = Grid.world_to_grid(input_position)
 		var tile: Tile = map.get_tile_xy(grid_position.x, grid_position.y)
-		if tile.is_explored:
+		if tile.is_explored: 
 			var delta: Vector2i = grid_position - game.player.grid_position
 			action = MovementAction.new(delta.x, delta.y)
 		
