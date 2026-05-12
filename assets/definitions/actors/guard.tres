@@ -11,4 +11,7 @@ region = Rect2(496, 96, 16, 16)
 script = ExtResource("1_mdsvi")
 name = "Guard"
 texture = SubResource("AtlasTexture_073yn")
+speed = 8
+team = "monster"
+enemy_teams = Array[String](["player"])
 metadata/_custom_type_script = "uid://g2m5qy2gksda"

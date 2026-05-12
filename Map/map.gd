@@ -12,9 +12,9 @@ extends Node2D
 
 var map_data: MapData
 
-func generate(player: Entity):
+func generate(player: Entity, rng: RandomNumberGenerator):
 	var before_time := Time.get_unix_time_from_system()
-	map_data = dungeon_generator.generate_dungeon(player)
+	map_data = dungeon_generator.generate_dungeon(player, rng)
 	var after_time: = Time.get_unix_time_from_system()
 	print(after_time - before_time, " seconds to generate the dungeon")
 	_place_tiles()

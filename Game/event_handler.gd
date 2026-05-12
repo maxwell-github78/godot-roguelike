@@ -14,6 +14,8 @@ func get_action() -> Action:
 		action = BumpAction.new(-1, 0)
 	elif Input.is_action_just_pressed("ui_right"):
 		action = BumpAction.new(1, 0)
+	elif Input.is_action_just_pressed("ui_space"):
+		action = StandAction.new()
 	
 	elif Input.is_action_just_pressed("ui_click"):
 		var input_position: Vector2i = game.camera.get_global_mouse_position()

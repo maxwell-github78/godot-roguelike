@@ -7,4 +7,4 @@ func perform(game: Game, entity: Entity) -> void:
 	var target: Entity = game.get_map_data().get_blocking_entity_at_location(destination)
 	if not target:
 		return
-	print("You kick the %s, much to it's annoyance!" % target.get_entity_name())
+	print(entity.get_entity_name() + " kicks the %s, much to its annoyance!" % target.get_entity_name())

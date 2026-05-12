@@ -9,6 +9,7 @@
 [ext_resource type="Script" uid="uid://wvqlumws0uxm" path="res://Game/entity_generator.gd" id="5_7gi1t"]
 [ext_resource type="Script" uid="uid://cmxktajhpw02w" path="res://Game/camera.gd" id="5_fwxkx"]
 [ext_resource type="Script" uid="uid://qlbb8spipex" path="res://Game/debug.gd" id="7_oomkl"]
+[ext_resource type="Script" uid="uid://crfhlycnauidr" path="res://Entities/Actors/behaviour.gd" id="8_7gi1t"]
 
 [node name="Game" type="Node2D" unique_id=1953761449]
 script = ExtResource("1_bk3v5")
@@ -21,9 +22,12 @@ script = ExtResource("4_jcm6v")
 
 [node name="TileGenerator" type="Node" parent="Map/DungeonGenerator" unique_id=484676913]
 script = ExtResource("4_kul4i")
+door_chance = 0.7
 
 [node name="EntityGenerator" type="Node" parent="Map/DungeonGenerator" unique_id=1964684418]
 script = ExtResource("5_7gi1t")
+n_monsters = 150
+no_spawn_radius = 10
 
 [node name="FieldOfView" type="Node" parent="Map" unique_id=731902409]
 script = ExtResource("4_qmv3x")
@@ -34,6 +38,9 @@ script = ExtResource("4_qmv3x")
 
 [node name="EventHandler" type="Node" parent="." unique_id=1280670172]
 script = ExtResource("3_7raqb")
+
+[node name="Behaviour" type="Node" parent="." unique_id=1703277660]
+script = ExtResource("8_7gi1t")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1378997935]
 zoom = Vector2(3, 3)

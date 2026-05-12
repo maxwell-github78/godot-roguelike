@@ -12,6 +12,7 @@ extends Node
 @export var corridor_length_maximum: int = 20
 @export var corridor_width_minimum: int = 3
 @export var corridor_width_maximum: int = 3
+@export var door_chance: float = 0.5
 
 var marks: Array[Mark]
 var feature_bounds: Array[Vector2i]
@@ -87,7 +88,7 @@ func generate(dungeon: MapData, in_rng: RandomNumberGenerator):
 					var definition := walls[wall_index]
 					_carve_room_walls(dungeon, candidate_room, definition)
 					var portal: TileDefinition 
-					if rng.randf() > 0.7:
+					if rng.randf() < door_chance:
 						portal = dungeon.tile_types.door
 					else:
 						portal = dungeon.tile_types.floor

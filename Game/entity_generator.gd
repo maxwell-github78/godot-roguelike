@@ -3,6 +3,7 @@ extends Node
 
 @export var n_monsters: int = 100
 @export var path_string: String = "res://assets/definitions/actors/"
+@export var no_spawn_radius: int = 5
 
 var actor_types: Dictionary
 const feature_weights := {
@@ -28,7 +29,7 @@ func generate(dungeon: MapData, rng: RandomNumberGenerator):
 		grid_position = dungeon.floor_grid_positions.pop_at(index)
 		distance_from_player_start = grid_position - dungeon.player_start_position
 		tile = dungeon.get_tile_xy(grid_position.x, grid_position.y)
-		if distance_from_player_start.x**2 + distance_from_player_start.y**2 < 5**2 or not tile.is_walkable():
+		if distance_from_player_start.x**2 + distance_from_player_start.y**2 < no_spawn_radius**2 or not tile.is_walkable():
 			continue
 		feature_number = rng.randi_range(0, 99)
 		for key in feature_weights.keys():
