@@ -9,10 +9,13 @@ var energy: int = 0
 var team: String 
 var enemy_teams: Array[String] 
 
+@export var movement_animation_time: float = 0.1
+
 var grid_position: Vector2i:
 	set(value):
 		grid_position = value
-		position = Grid.grid_to_world(grid_position)
+		var movement_tween := create_tween()
+		movement_tween.tween_property(self, "position", Vector2(Grid.grid_to_world(grid_position)), movement_animation_time)
 
 func set_entity_type(entity_definition: EntityDefinition) -> void:
 	_definition = entity_definition
@@ -29,6 +32,7 @@ func _init(start_position: Vector2i, entity_definition: EntityDefinition) -> voi
 	
 func move(move_offset: Vector2i) -> void:
 	grid_position += move_offset
+	
 	
 func is_blocking_movement() -> bool:
 	return _definition.is_blocking_movement

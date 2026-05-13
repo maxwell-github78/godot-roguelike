@@ -48,7 +48,7 @@ func generate(dungeon: MapData, in_rng: RandomNumberGenerator):
 		]
 	var start := Mark.new()
 	start.position = Vector2i(map_width / 2, map_height / 2)
-	var start_room:= _random_room_round(start)
+	var start_room:= _random_room_rectangle(start)
 	start_room.walls()
 	#for debug in start_room.marks:
 		#_carve_tile(dungeon, debug.position.x, debug.position.y, dungeon.tile_types.debug)
@@ -56,13 +56,12 @@ func generate(dungeon: MapData, in_rng: RandomNumberGenerator):
 	_carve_room(dungeon, start_room)
 	_carve_room_walls(dungeon, start_room, dungeon.tile_types.wall_blue)
 	
-	var start_features: Array[Vector2i] = feature_bounds.duplicate_deep()
+	#var start_features: Array[Vector2i] = feature_bounds.duplicate_deep()
 	
 	var _features: int = 0
 	var attempts: int = 0
 	var feature_type: String = "room"
 	while len(feature_bounds) < 0.15 * map_width * map_height and len(marks) > 0 and attempts < 5000:
-	#while _features < 1 and attempts < 5000:
 		attempts += 1
 		var feature_number := rng.randi_range(0, 99)
 		for key in feature_weights.keys():
