@@ -12,3 +12,7 @@ func perform(game: Game, entity: Entity) -> void:
 	if game.get_map_data().get_blocking_entity_at_location(destination):
 		return
 	entity.move(offset)
+	var tween = entity.create_tween()
+	tween.tween_property(entity, "position", Vector2(Grid.grid_to_world(destination)), 0.1)
+	if entity.visible:
+		Interruption_Animation.new(game, tween)

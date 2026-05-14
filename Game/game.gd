@@ -12,8 +12,12 @@ var turn_queue: Array[Entity] = []
 var event_queue: Array[Event] = []
 const required_energy: int = 100
 var current_entity: Entity 
-var found_player_controlled: bool = false
+var player_controlled_entity: Entity
 var energised_npcs: Array[Entity] = []
+var current_index: int = 0
+var entities: Array[Entity]
+var interruptions: int
+var moves: Dictionary[Entity, Array] = {}
 
 var rng := RandomNumberGenerator.new()
 
@@ -27,63 +31,73 @@ func _ready() -> void:
 	map.generate(player, rng)
 	map.update_fov(player.grid_position)
 	
-#REWRITE SYSTEM TO USE AN ACTION QUEUE AND AN ENERGY QUEUE
+#REWRITE ENERGY PASS SYSTEM TO USE A SENTINEL-LIKE SYSTEM
 
-func _physics_process(_delta: float) -> void:
+func _process(_delta: float) -> void:
+	#print(interruptions)
+	if interruptions > 0:
+		return
 	if event_queue.is_empty():
-		if not current_entity:
-			var entities := map.entities.get_children()
-			while not current_entity and energised_npcs.is_empty() and not entities.is_empty():
-				energy_pass(entities)
-				
+		while not player_controlled_entity and not entities.is_empty():
+			current_entity = entities.pop_front()
+			entities.append(current_entity)
+			if Grid.a_within_b(current_entity.grid_position, player.grid_position, 10):
+				current_entity.energy += current_entity.speed
+			if current_entity.energy >= 100:
+				current_entity.energy -= 100
+				if current_entity.is_player_controlled:
+					player_controlled_entity = current_entity
+					break
+				else:
+					energised_npcs.append(current_entity)
+			
 		for entity in energised_npcs:
-			event_queue.append(npc_action(entity))
+			event_queue.append(_npc_action(entity))
 		energised_npcs.clear()
 
-		if current_entity:
-			if player_action(current_entity):
-				event_queue.append(player_action(current_entity))
-				found_player_controlled = false
-				current_entity = null
+		if player_controlled_entity:
+			var event := _player_action(player_controlled_entity)
+			if event:
+				event_queue.append(event)
+				player_controlled_entity = null
 	else:
 		var event: Event
 		while not event_queue.is_empty():
+			if interruptions > 0:
+				return
 			event = event_queue.pop_front()
-			perform_action(event.action, event.target)
+			if event.target not in moves.keys():
+				moves[event.target] = []
+			if event.action is MovementAction:
+				moves[event.target].append(event.action.offset + event.target.grid_position)
+			if moves[event.target].size() >= event.target.max_number_tweens:
+				#print("Afterimage")
+				pass
+			_perform_action(event.action, event.target)
+		moves.clear()
+
 	
-
-func energy_pass(entities: Array[Node]):
-	for entity in entities:
-		if Grid.a_within_b(player.grid_position, entity.grid_position, 15):
-			entity.energy += entity.speed
-			if entity.energy >= required_energy and not found_player_controlled:
-				entity.energy = 0
-				current_entity = entity
-				if current_entity.is_player_controlled:
-					found_player_controlled = true
-				else:
-					energised_npcs.append(current_entity)	
-	if not found_player_controlled:
-		current_entity = null	
 					
-
-func perform_action(action: Action, entity: Entity):
+func _perform_action(action: Action, entity: Entity):
 	if action:
 		var previous_position := entity.grid_position
 		action.perform(self, entity)
 		if entity.grid_position != previous_position:
-			map.update_fov(player.grid_position) #Does not handle multiple fields of view
+			if entity.is_player_controlled:
+				map.update_fov(player.grid_position) #Does not handle multiple fields of view
+			else:
+				map.update_entity_visibility()
 		entity.energy = 0
 		return true
 	return false
 				
-func player_action(entity: Entity) -> Event:
+func _player_action(entity: Entity) -> Event:
 	var action: Action = event_handler.get_action()
 	if action:
 		return Event.new(action, entity)
 	return null
 
-func npc_action(entity: Entity) -> Event:
+func _npc_action(entity: Entity) -> Event:
 	var action: Action = behaviour.get_action()
 	if action:
 		return Event.new(action, entity)
@@ -92,3 +106,10 @@ func npc_action(entity: Entity) -> Event:
 	
 func get_map_data() -> MapData:
 	return map.map_data
+
+func _on_entities_new_entity(entity: Entity) -> void:
+	entities.append(entity)
+	
+func _on_entity_removed(entity: Entity):
+	var index = entities.rfind(entity)
+	entities.remove_at(index)

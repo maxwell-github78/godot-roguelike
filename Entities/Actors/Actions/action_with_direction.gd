@@ -8,5 +8,5 @@ func _init(dx: int, dy: int) -> void:
 	offset = Vector2i(dx, dy)
 
 
-func perform(game: Game, entity: Entity) -> void:
+func perform(_game: Game, _entity: Entity) -> void:
 	pass

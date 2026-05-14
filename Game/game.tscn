@@ -6,8 +6,9 @@
 [ext_resource type="Script" uid="uid://c5mfpchya1hfk" path="res://Map/dungeon_generator.gd" id="4_jcm6v"]
 [ext_resource type="Script" uid="uid://cv4gcne0coebp" path="res://Map/tile_generator.gd" id="4_kul4i"]
 [ext_resource type="Script" uid="uid://l6mwn3et1kcx" path="res://Map/field_of_view.gd" id="4_qmv3x"]
-[ext_resource type="Script" uid="uid://wvqlumws0uxm" path="res://Game/entity_generator.gd" id="5_7gi1t"]
+[ext_resource type="Script" uid="uid://wvqlumws0uxm" path="res://Map/entity_generator.gd" id="5_7gi1t"]
 [ext_resource type="Script" uid="uid://cmxktajhpw02w" path="res://Game/camera.gd" id="5_fwxkx"]
+[ext_resource type="Script" uid="uid://h3e2bbsxsrdk" path="res://Game/entity_manager.gd" id="7_fsxsm"]
 [ext_resource type="Script" uid="uid://qlbb8spipex" path="res://Game/debug.gd" id="7_oomkl"]
 [ext_resource type="Script" uid="uid://crfhlycnauidr" path="res://Entities/Actors/behaviour.gd" id="8_7gi1t"]
 
@@ -34,6 +35,7 @@ script = ExtResource("4_qmv3x")
 [node name="Tiles" type="Node2D" parent="Map" unique_id=261080215]
 
 [node name="Entities" type="Node2D" parent="Map" unique_id=1005672856]
+script = ExtResource("7_fsxsm")
 
 [node name="EventHandler" type="Node" parent="." unique_id=1280670172]
 script = ExtResource("3_7raqb")
@@ -57,4 +59,5 @@ zoom_speed = 0.25
 script = ExtResource("7_oomkl")
 default_all_lit = true
 
+[connection signal="new_entity" from="Map/Entities" to="." method="_on_entities_new_entity"]
 [connection signal="light_debug_changed" from="Debug" to="Map" method="_on_debug_light_debug_changed"]

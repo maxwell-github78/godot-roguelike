@@ -6,7 +6,7 @@ extends Resource
 @export var texture: AtlasTexture
 
 @export_category("Mechanics")
-@export var speed: int = 24
+@export var speed: int = 25
 @export var team: String
 @export var enemy_teams: Array[String]
 @export var is_blocking_movement: bool = true

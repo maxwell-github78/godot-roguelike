@@ -1,5 +1,5 @@
 class_name Event
-extends Object
+extends RefCounted
 
 var action: Action
 var target: Entity 

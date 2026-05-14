@@ -7,7 +7,6 @@ extends Node
 
 @onready var player_start_position: Vector2i = Vector2i( map_width / 2 + 3, map_height / 2 + 3)
 
-var _rng := RandomNumberGenerator.new()
 @onready var tile_generator: TileGenerator = $TileGenerator
 @onready var entity_generator: EntityGenerator = $EntityGenerator
 	

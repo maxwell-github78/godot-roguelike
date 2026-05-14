@@ -7,8 +7,9 @@ extends Node
 
 var actor_types: Dictionary
 const feature_weights := {
-	"guard": [0,49],
-	"celestial": [50, 99],
+	"guard": [100,39],
+	"celestial": [140, 69],
+	"imp": [0, 99],
 }
 
 func _ready() -> void:
@@ -24,7 +25,7 @@ func generate(dungeon: MapData, rng: RandomNumberGenerator):
 	var tile: Tile
 	assert(n_monsters < dungeon.floor_grid_positions.size())
 	var monster_count: int = 0
-	while monster_count <= n_monsters:
+	while monster_count < n_monsters:
 		index = rng.randi_range(0, dungeon.floor_grid_positions.size() - 1)
 		grid_position = dungeon.floor_grid_positions.pop_at(index)
 		distance_from_player_start = grid_position - dungeon.player_start_position
