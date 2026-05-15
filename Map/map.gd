@@ -3,7 +3,7 @@ extends Node2D
 
 @onready var tiles: Node2D = $Tiles
 @onready var entities: Node2D = $Entities
-
+@onready var animation_sprites: Node2D = $AnimationSprites
 @export var fov_radius: int = 8
 @onready var field_of_view: FieldOfView = $FieldOfView
 

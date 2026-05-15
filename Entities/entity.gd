@@ -9,9 +9,9 @@ var energy: int = 0
 var team: String 
 var enemy_teams: Array[String] 
 
-var tweens: Array[Tween] = []
-var current_tween: Tween
-const max_number_tweens: int = 3
+var animations: Array[MovementAnimation] = []
+var current_animation: MovementAnimation
+const max_number_tweens: int = 2
 
 @export var movement_animation_time: float = 0.1
 
@@ -40,23 +40,34 @@ func _notification(what):
 	if what == NOTIFICATION_PARENTED:
 		if get_parent().has_signal("new_entity"):
 			get_parent().emit_signal("new_entity", self)
+
 			
-func add_tween(tween: Tween):
-	tweens.append(tween)
+func add_animation(animation: MovementAnimation):
+	var tween = animation.tween
+	animations.append(animation)
 	tween.pause()
 	tween.finished.connect(_tween_finished)
-	if tweens.size() == 1 and not current_tween:
-		current_tween = tweens.pop_front()
-		current_tween.play()
+	var size = animations.size()
+	if current_animation:
+		size += 1
+	if size >= max_number_tweens:
+		current_animation.end()
+		for afterimage in animations:
+			afterimage.draw_afterimage()
+		animations.clear()
+		position = Grid.grid_to_world(grid_position)
+	elif animations.size() == 1 and not current_animation:
+		current_animation = animations.pop_front()
+		current_animation.play()
 	
-
-		
-
-
+func _process(_delta: float) -> void:
+	if animations.is_empty() and not current_animation:
+		assert(position == Vector2(Grid.grid_to_world(grid_position)))
+	
 func _tween_finished():
-	current_tween = tweens.pop_front()
-	if current_tween:
-		current_tween.play()
+	current_animation = animations.pop_front()
+	if current_animation:
+		current_animation.play()
 		return
 	position = Grid.grid_to_world(grid_position)
 	
@@ -70,5 +81,8 @@ func is_blocking_movement() -> bool:
 
 func get_entity_name() -> String:
 	return _definition.name
+	
+func get_entity_texture() -> Texture2D:
+	return texture
 
 	

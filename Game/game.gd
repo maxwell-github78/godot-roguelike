@@ -30,11 +30,9 @@ func _ready() -> void:
 	rng.randomize()
 	map.generate(player, rng)
 	map.update_fov(player.grid_position)
-	
-#REWRITE ENERGY PASS SYSTEM TO USE A SENTINEL-LIKE SYSTEM
 
 func _process(_delta: float) -> void:
-	#print(interruptions)
+	print(interruptions)
 	if interruptions > 0:
 		return
 	if event_queue.is_empty():
@@ -66,13 +64,6 @@ func _process(_delta: float) -> void:
 			if interruptions > 0:
 				return
 			event = event_queue.pop_front()
-			if event.target not in moves.keys():
-				moves[event.target] = []
-			if event.action is MovementAction:
-				moves[event.target].append(event.action.offset + event.target.grid_position)
-			if moves[event.target].size() >= event.target.max_number_tweens:
-				#print("Afterimage")
-				pass
 			_perform_action(event.action, event.target)
 		moves.clear()
 

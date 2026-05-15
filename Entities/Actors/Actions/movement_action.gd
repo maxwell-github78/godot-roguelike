@@ -14,5 +14,5 @@ func perform(game: Game, entity: Entity) -> void:
 	entity.move(offset)
 	var tween = entity.create_tween()
 	tween.tween_property(entity, "position", Vector2(Grid.grid_to_world(destination)), 0.1)
-	if entity.visible:
-		Interruption_Animation.new(game, tween)
+	
+	MovementAnimation.new(game, tween, entity, entity.grid_position, destination, false, true)

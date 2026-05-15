@@ -12,4 +12,4 @@ func perform(game: Game, entity: Entity) -> void:
 	tween.tween_property(entity, "position", Vector2(Grid.grid_to_world(entity.grid_position)) + 0.2 * Grid.grid_to_world(offset), 0.1)
 	tween.tween_property(entity, "position", Vector2(Grid.grid_to_world(entity.grid_position)), 0.1)
 	#print(entity.get_entity_name() + " kicks the %s, much to its annoyance!" % target.get_entity_name())
-	#Interruption_Animation.new(game, movement_tween)
+	MovementAnimation.new(game, tween, entity, entity.grid_position, destination, true, false)

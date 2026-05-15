@@ -37,6 +37,8 @@ script = ExtResource("4_qmv3x")
 [node name="Entities" type="Node2D" parent="Map" unique_id=1005672856]
 script = ExtResource("7_fsxsm")
 
+[node name="AnimationSprites" type="Node2D" parent="Map" unique_id=1644393324]
+
 [node name="EventHandler" type="Node" parent="." unique_id=1280670172]
 script = ExtResource("3_7raqb")
 
