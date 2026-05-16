@@ -24,6 +24,7 @@ func _init(in_game: Game, in_tween: Tween, entity: Entity, start: Vector2i, dest
 	entity.add_animation(self)
 
 	if interrupt:
+		print(self, "start")
 		tween.finished.connect(_tween_finished)
 		_tween_started()
 		
@@ -53,12 +54,16 @@ func play():
 	visibility()
 	
 func visibility():
+	print(start_grid_position, end_grid_position)
 	if tiles.get_tile(start_grid_position).is_in_view or tiles.get_tile(end_grid_position).is_in_view:
 		target.visible = true
+		#target.modulate = Color(1,1,1)
 	else:
 		target.visible = false
+		#target.modulate = Color(0,0,1)
 
 func _tween_finished():
+	print(self, "end")
 	game.interruptions -= 1
 
 func _tween_started():

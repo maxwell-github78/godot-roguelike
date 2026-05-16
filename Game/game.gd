@@ -32,10 +32,10 @@ func _ready() -> void:
 	map.update_fov(player.grid_position)
 
 func _process(_delta: float) -> void:
-	print(interruptions)
+	#print(interruptions)
 	if interruptions > 0:
 		return
-	if event_queue.is_empty():
+	if event_queue.is_empty() and not player_controlled_entity:
 		while not player_controlled_entity and not entities.is_empty():
 			current_entity = entities.pop_front()
 			entities.append(current_entity)
@@ -53,20 +53,18 @@ func _process(_delta: float) -> void:
 			event_queue.append(_npc_action(entity))
 		energised_npcs.clear()
 
-		if player_controlled_entity:
-			var event := _player_action(player_controlled_entity)
-			if event:
-				event_queue.append(event)
-				player_controlled_entity = null
-	else:
-		var event: Event
-		while not event_queue.is_empty():
-			if interruptions > 0:
-				return
-			event = event_queue.pop_front()
-			_perform_action(event.action, event.target)
-		moves.clear()
+	if player_controlled_entity:
+		var player_event := _player_action(player_controlled_entity)
+		if player_event:
+			event_queue.append(player_event)
+			player_controlled_entity = null
 
+	var event: Event
+	while not event_queue.is_empty():
+		if interruptions > 0:
+			return
+		event = event_queue.pop_front()
+		_perform_action(event.action, event.target)
 	
 					
 func _perform_action(action: Action, entity: Entity):

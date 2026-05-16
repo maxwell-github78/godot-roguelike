@@ -11,7 +11,7 @@ var enemy_teams: Array[String]
 
 var animations: Array[MovementAnimation] = []
 var current_animation: MovementAnimation
-const max_number_tweens: int = 2
+const max_number_tweens: int = 4
 
 @export var movement_animation_time: float = 0.1
 
@@ -50,13 +50,13 @@ func add_animation(animation: MovementAnimation):
 	var size = animations.size()
 	if current_animation:
 		size += 1
-	if size >= max_number_tweens:
-		current_animation.end()
-		for afterimage in animations:
-			afterimage.draw_afterimage()
-		animations.clear()
-		position = Grid.grid_to_world(grid_position)
-	elif animations.size() == 1 and not current_animation:
+	#if size >= max_number_tweens: #NOT SURE WHAT THE ISSUE IS
+		#animations.push_front(current_animation)
+		#for afterimage in animations:
+			#afterimage.draw_afterimage()
+		#animations.clear()
+		#position = Grid.grid_to_world(grid_position)
+	if animations.size() == 1 and not current_animation:
 		current_animation = animations.pop_front()
 		current_animation.play()
 	
@@ -65,6 +65,9 @@ func _process(_delta: float) -> void:
 		assert(position == Vector2(Grid.grid_to_world(grid_position)))
 	
 func _tween_finished():
+	if animations.is_empty():
+		current_animation.game.map.update_fov(current_animation.game.player.grid_position)
+		visible = current_animation.tiles.get_tile(grid_position).is_in_view
 	current_animation = animations.pop_front()
 	if current_animation:
 		current_animation.play()
