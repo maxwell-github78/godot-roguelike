@@ -47,8 +47,6 @@ func _notification(what):
 
 			
 func add_animation(animation: MovementAnimation):
-	#if animations.is_empty():
-		#blur = false
 	var tween = animation.tween
 	animations.append(animation)
 	tween.pause()
@@ -73,7 +71,6 @@ func detect_afterimage() -> void:
 		
 		animations.clear()
 		current_animation = null
-		
 		
 		blur = true
 	

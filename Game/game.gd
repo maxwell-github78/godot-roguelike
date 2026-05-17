@@ -61,6 +61,8 @@ func _process(_delta: float) -> void:
 		if player_event:
 			event_queue.append(player_event)
 			player_controlled_entity = null
+			for entity in entities:
+				entity.blur = false
 
 	var event: Event
 	while not event_queue.is_empty():

@@ -8,9 +8,9 @@ extends Node
 
 var actor_types: Dictionary
 const feature_weights := {
-	"guard": [110,39],
-	"celestial": [140, 69],
-	"imp": [0, 99],
+	"guard": [0,29],
+	"celestial": [30, 59],
+	"imp": [60, 99],
 }
 
 func _ready() -> void:
