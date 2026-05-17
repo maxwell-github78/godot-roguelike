@@ -4,12 +4,13 @@ extends Node
 @export var n_monsters: int = 100
 @export var path_string: String = "res://assets/definitions/actors/"
 @export var no_spawn_radius: int = 5
+@onready var game: Game = $"../../.."
 
 var actor_types: Dictionary
 const feature_weights := {
-	"guard": [0,39],
-	"celestial": [40, 69],
-	"imp": [70, 99],
+	"guard": [110,39],
+	"celestial": [140, 69],
+	"imp": [0, 99],
 }
 
 func _ready() -> void:
@@ -37,7 +38,7 @@ func generate(dungeon: MapData, rng: RandomNumberGenerator):
 			if feature_number >= feature_weights[key][0] and feature_number <= feature_weights[key][1]:
 				feature_type = actor_types[key]
 				
-		entity = Entity.new(grid_position, feature_type)
+		entity = Entity.new(game, grid_position, feature_type)
 		dungeon.entities.append(entity)
 		monster_count += 1
 	

@@ -24,12 +24,11 @@ func _init(in_game: Game, in_tween: Tween, entity: Entity, start: Vector2i, dest
 	entity.add_animation(self)
 
 	if interrupt:
-		print(self, "start")
 		tween.finished.connect(_tween_finished)
 		_tween_started()
 		
 func draw_afterimage():
-	if make_afterimage and tiles.get_tile(start_grid_position).is_in_view:
+	if tiles.get_tile(start_grid_position).is_in_view or tiles.get_tile(end_grid_position).is_in_view:
 		image = Sprite2D.new()
 		game.map.animation_sprites.add_child(image)
 		image.texture = target.get_entity_texture()
@@ -37,9 +36,9 @@ func draw_afterimage():
 		image.centered = false
 		var fade_tween = image.create_tween()
 		image.modulate.a = 0.5
-		fade_tween.tween_property(image, "modulate:a", 0.0, 0.5)
+		fade_tween.tween_property(image, "modulate:a", 0.0, 1.0)
 		fade_tween.finished.connect(kill_afterimage)
-		end()
+	
 
 func kill_afterimage():
 	image.queue_free()
@@ -54,16 +53,12 @@ func play():
 	visibility()
 	
 func visibility():
-	#print(start_grid_position, end_grid_position)
 	if tiles.get_tile(start_grid_position).is_in_view or tiles.get_tile(end_grid_position).is_in_view:
 		target.visible = true
-		#target.modulate = Color(1,1,1)
 	else:
 		target.visible = false
-		#target.modulate = Color(0,0,1)
 
 func _tween_finished():
-	print(self, "end")
 	game.interruptions -= 1
 
 func _tween_started():

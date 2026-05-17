@@ -23,7 +23,7 @@ var rng := RandomNumberGenerator.new()
 
 func _ready() -> void:
 	Engine.max_fps = 60
-	player = Entity.new(Vector2i.ZERO, player_definition)
+	player = Entity.new(self, Vector2i.ZERO, player_definition)
 	remove_child(camera)
 	player.add_child(camera)
 	
@@ -49,12 +49,14 @@ func _process(_delta: float) -> void:
 					break
 				else:
 					energised_npcs.append(current_entity)
-			
+		
+		print("npc events")
 		for entity in energised_npcs:
 			event_queue.append(_npc_action(entity))
 		energised_npcs.clear()
 
 	if player_controlled_entity:
+		#print("waiting for player controlled entity")
 		var player_event := _player_action(player_controlled_entity)
 		if player_event:
 			event_queue.append(player_event)
@@ -75,7 +77,7 @@ func _perform_action(action: Action, entity: Entity):
 		if entity.grid_position != previous_position:
 			if entity.is_player_controlled:
 				map.update_fov(player.grid_position) #Does not handle multiple fields of view
-				map.update_entity_visibility()
+			
 		entity.energy = 0
 		return true
 	return false

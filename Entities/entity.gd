@@ -5,13 +5,16 @@ var _definition: EntityDefinition
 var speed: int 
 var is_player_controlled: bool 
 var energy: int = 0
+var blur: bool = false
 
 var team: String 
 var enemy_teams: Array[String] 
+var shade := RandomNumberGenerator.new().randf()
 
 var animations: Array[MovementAnimation] = []
 var current_animation: MovementAnimation
 const max_number_tweens: int = 4
+var game: Game
 
 @export var movement_animation_time: float = 0.1
 
@@ -29,10 +32,11 @@ func set_entity_type(entity_definition: EntityDefinition) -> void:
 	team = _definition.team
 	enemy_teams = _definition.enemy_teams
 	
-func _init(start_position: Vector2i, entity_definition: EntityDefinition) -> void:
+func _init(in_game: Game, start_position: Vector2i, entity_definition: EntityDefinition) -> void:
 	centered = false
 	grid_position = start_position
 	position = Grid.grid_to_world(grid_position)
+	game = in_game
 	set_entity_type(entity_definition)
 	
 
@@ -43,33 +47,43 @@ func _notification(what):
 
 			
 func add_animation(animation: MovementAnimation):
+	#if animations.is_empty():
+		#blur = false
 	var tween = animation.tween
 	animations.append(animation)
 	tween.pause()
 	tween.finished.connect(_tween_finished)
-	var size = animations.size()
-	if current_animation:
-		size += 1
-	#if size >= max_number_tweens: #NOT SURE WHAT THE ISSUE IS
-		#animations.push_front(current_animation)
-		#for afterimage in animations:
-			#afterimage.draw_afterimage()
-		#animations.clear()
-		#position = Grid.grid_to_world(grid_position)
+	
+	
+	detect_afterimage()
+		
 	if animations.size() == 1 and not current_animation:
 		current_animation = animations.pop_front()
 		current_animation.play()
+		
+func detect_afterimage() -> void:
+	if animations.size() + 1 >= max_number_tweens or blur:
+		if current_animation:
+			animations.push_front(current_animation)
+			current_animation.end()
+		for killed_animation in animations:
+			if killed_animation.make_afterimage:
+				killed_animation.draw_afterimage()
+			killed_animation.end()
+		
+		animations.clear()
+		current_animation = null
+		
+		
+		blur = true
 	
-func _process(_delta: float) -> void:
-	if animations.is_empty() and not current_animation:
-		assert(position == Vector2(Grid.grid_to_world(grid_position)))
-	
-func _tween_finished():
+func _tween_finished() -> void:
 	if animations.is_empty():
 		current_animation.game.map.update_fov(current_animation.game.player.grid_position)
 		visible = current_animation.tiles.get_tile(grid_position).is_in_view
 	current_animation = animations.pop_front()
 	if current_animation:
+		detect_afterimage()
 		current_animation.play()
 		return
 	position = Grid.grid_to_world(grid_position)
@@ -77,6 +91,10 @@ func _tween_finished():
 	
 func move(move_offset: Vector2i) -> void:
 	grid_position += move_offset
+	if blur:
+		position = Grid.grid_to_world(grid_position)
+		visible = game.get_map_data().get_tile(grid_position).is_in_view
+		
 	
 	
 func is_blocking_movement() -> bool:

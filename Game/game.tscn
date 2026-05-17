@@ -27,6 +27,7 @@ door_chance = 0.7
 
 [node name="EntityGenerator" type="Node" parent="Map/DungeonGenerator" unique_id=1964684418]
 script = ExtResource("5_7gi1t")
+n_monsters = 200
 no_spawn_radius = 10
 
 [node name="FieldOfView" type="Node" parent="Map" unique_id=731902409]
