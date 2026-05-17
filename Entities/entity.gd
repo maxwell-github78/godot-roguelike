@@ -13,7 +13,7 @@ var shade := RandomNumberGenerator.new().randf()
 
 var animations: Array[MovementAnimation] = []
 var current_animation: MovementAnimation
-const max_number_tweens: int = 4
+const max_number_tweens: int = 3
 var game: Game
 
 @export var movement_animation_time: float = 0.1
