@@ -30,6 +30,7 @@ func _ready() -> void:
 	rng.randomize()
 	map.generate(player, rng)
 	map.update_fov(player.grid_position)
+	map.update_entity_visibility()
 
 func _process(_delta: float) -> void:
 	#print(interruptions)
@@ -74,7 +75,6 @@ func _perform_action(action: Action, entity: Entity):
 		if entity.grid_position != previous_position:
 			if entity.is_player_controlled:
 				map.update_fov(player.grid_position) #Does not handle multiple fields of view
-			else:
 				map.update_entity_visibility()
 		entity.energy = 0
 		return true

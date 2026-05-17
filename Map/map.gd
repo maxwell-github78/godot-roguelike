@@ -28,8 +28,8 @@ func update_fov(player_position: Vector2i) -> void:
 
 func update_entity_visibility() -> void:
 	for entity in map_data.entities:
-		pass
-		#entity.visible = map_data.get_tile(entity.grid_position).is_in_view
+		if not entity.current_animation:
+			entity.visible = map_data.get_tile(entity.grid_position).is_in_view
 
 func _place_entities() -> void:
 	for entity in map_data.entities:

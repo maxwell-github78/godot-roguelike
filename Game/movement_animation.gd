@@ -54,7 +54,7 @@ func play():
 	visibility()
 	
 func visibility():
-	print(start_grid_position, end_grid_position)
+	#print(start_grid_position, end_grid_position)
 	if tiles.get_tile(start_grid_position).is_in_view or tiles.get_tile(end_grid_position).is_in_view:
 		target.visible = true
 		#target.modulate = Color(1,1,1)

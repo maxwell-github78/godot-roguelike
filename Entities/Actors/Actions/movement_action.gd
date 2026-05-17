@@ -12,7 +12,7 @@ func perform(game: Game, entity: Entity) -> void:
 	if game.get_map_data().get_blocking_entity_at_location(destination):
 		return
 	var tween = entity.create_tween()
-	tween.tween_property(entity, "position", Vector2(Grid.grid_to_world(destination)), 0.5)
+	tween.tween_property(entity, "position", Vector2(Grid.grid_to_world(destination)), 0.1)
 	MovementAnimation.new(game, tween, entity, entity.grid_position, destination, false, false)
 	entity.move(offset)
 	

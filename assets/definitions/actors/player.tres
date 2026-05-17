@@ -11,7 +11,6 @@ region = Rect2(400, 0, 16, 16)
 script = ExtResource("1_rfcna")
 name = "Player"
 texture = SubResource("AtlasTexture_8yuns")
-speed = 10
 team = "player"
 enemy_teams = Array[String](["monster"])
 is_player_controlled = true
