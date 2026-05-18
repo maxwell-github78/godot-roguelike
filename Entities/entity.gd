@@ -15,7 +15,6 @@ var animations: Array[MovementAnimation] = []
 var current_animation: MovementAnimation
 const max_number_tweens: int = 3
 var game: Game
-var map_data: MapData
 
 enum AIType {NONE, MELEE}
 var ai_component: BaseAIComponent
@@ -45,7 +44,7 @@ func set_entity_type(entity_definition: EntityDefinition) -> void:
 	if entity_definition.max_hp != 0:
 		health_component = HealthComponent.new(entity_definition)
 		add_child(health_component)
-		health_component.died.connect(remove)
+		health_component.died.connect(death)
 	
 func _init(in_game: Game, start_position: Vector2i, entity_definition: EntityDefinition) -> void:
 	centered = false
@@ -109,13 +108,24 @@ func move(move_offset: Vector2i) -> void:
 		position = Grid.grid_to_world(grid_position)
 		visible = game.get_map_data().get_tile(grid_position).is_in_view
 
-func remove():
+func death() -> void:
+	var parent := get_parent()
+	if parent:
+		parent.removed_entity.emit(self)
+		game.get_map_data().unregister_blocking_entity(self)
+		
+	var squash_tween = create_tween()
+	position += Vector2(0, texture.get_size().y)
+	offset -=  Vector2(0, texture.get_size().y)
+	squash_tween.tween_property(self, "scale:y", 0.4, 0.15).set_ease(Tween.EASE_OUT)
+	squash_tween.parallel().tween_property(self, "modulate", Color(0.8, 0, 0), 0.05) 
+	squash_tween.finished.connect(remove)
+
+func remove() -> void:
 	var parent := get_parent()
 	if parent:
 		parent.remove_child(self)
-		parent.removed_entity.emit(self)
-	else:
-		print("failed to kill self: ", get_entity_name())
+
 	
 		
 	
