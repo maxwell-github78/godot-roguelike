@@ -19,5 +19,6 @@ func generate_dungeon(player: Entity, rng: RandomNumberGenerator) -> MapData:
 	
 	tile_generator.generate(dungeon, rng)
 	entity_generator.generate(dungeon, rng)
+	dungeon.setup_pathfinding()
 	return dungeon
 	

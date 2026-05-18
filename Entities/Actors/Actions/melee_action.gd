@@ -8,6 +8,8 @@ func perform(game: Game, entity: Entity) -> void:
 	var target: Entity = game.get_map_data().get_blocking_entity_at_location(destination)
 	if not target:
 		return
+	if target.health_component:
+		target.health_component.hp -= entity.get_entity_power()
 	var tween = entity.create_tween()
 	tween.tween_property(entity, "position", Vector2(Grid.grid_to_world(entity.grid_position)) + 0.2 * Grid.grid_to_world(offset), 0.1)
 	tween.tween_property(entity, "position", Vector2(Grid.grid_to_world(entity.grid_position)), 0.1)

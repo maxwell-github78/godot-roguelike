@@ -15,6 +15,11 @@ var animations: Array[MovementAnimation] = []
 var current_animation: MovementAnimation
 const max_number_tweens: int = 3
 var game: Game
+var map_data: MapData
+
+enum AIType {NONE, MELEE}
+var ai_component: BaseAIComponent
+var health_component: HealthComponent
 
 @export var movement_animation_time: float = 0.1
 
@@ -31,6 +36,16 @@ func set_entity_type(entity_definition: EntityDefinition) -> void:
 	is_player_controlled = _definition.is_player_controlled
 	team = _definition.team
 	enemy_teams = _definition.enemy_teams
+	
+	match entity_definition.ai_type:
+		AIType.MELEE:
+			ai_component = MeleeEnemyAIComponent.new()
+			add_child(ai_component)
+	
+	if entity_definition.max_hp != 0:
+		health_component = HealthComponent.new(entity_definition)
+		add_child(health_component)
+		health_component.died.connect(remove)
 	
 func _init(in_game: Game, start_position: Vector2i, entity_definition: EntityDefinition) -> void:
 	centered = false
@@ -87,18 +102,35 @@ func _tween_finished() -> void:
 	
 	
 func move(move_offset: Vector2i) -> void:
+	game.get_map_data().unregister_blocking_entity(self)
 	grid_position += move_offset
+	game.get_map_data().register_blocking_entity(self)
 	if blur:
 		position = Grid.grid_to_world(grid_position)
 		visible = game.get_map_data().get_tile(grid_position).is_in_view
+
+func remove():
+	var parent := get_parent()
+	if parent:
+		parent.remove_child(self)
+		parent.removed_entity.emit(self)
+	else:
+		print("failed to kill self: ", get_entity_name())
+	
 		
 	
 	
 func is_blocking_movement() -> bool:
+	if health_component:
+		if health_component.hp == 0:
+			return false
 	return _definition.is_blocking_movement
 
 func get_entity_name() -> String:
 	return _definition.name
+	
+func get_entity_power() -> int:
+	return _definition.power
 	
 func get_entity_texture() -> Texture2D:
 	return texture

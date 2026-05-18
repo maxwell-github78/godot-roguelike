@@ -4,7 +4,7 @@ extends Node2D
 const player_definition: EntityDefinition = preload("res://assets/definitions/actors/player.tres")
 @onready var camera: Camera2D = $Camera2D
 @onready var player: Entity
-@onready var event_handler: EventHandler = $EventHandler
+@onready var input_handler: InputHandler = $InputHandler
 @onready var map: Map = $Map
 @onready var behaviour: Behaviour = $Behaviour
 
@@ -50,7 +50,6 @@ func _process(_delta: float) -> void:
 				else:
 					energised_npcs.append(current_entity)
 		
-		print("npc events")
 		for entity in energised_npcs:
 			event_queue.append(_npc_action(entity))
 		energised_npcs.clear()
@@ -69,7 +68,8 @@ func _process(_delta: float) -> void:
 		if interruptions > 0:
 			return
 		event = event_queue.pop_front()
-		_perform_action(event.action, event.target)
+		if event:
+			_perform_action(event.action, event.target)
 	
 					
 func _perform_action(action: Action, entity: Entity):
@@ -86,13 +86,15 @@ func _perform_action(action: Action, entity: Entity):
 	return false
 				
 func _player_action(entity: Entity) -> Event:
-	var action: Action = event_handler.get_action()
+	var action: Action = input_handler.get_action()
 	if action:
 		return Event.new(action, entity)
 	return null
 
 func _npc_action(entity: Entity) -> Event:
-	var action: Action = behaviour.get_action()
+	if not entity.ai_component:
+		return null
+	var action: Action = entity.ai_component.get_action()
 	if action:
 		return Event.new(action, entity)
 	return null
@@ -103,7 +105,6 @@ func get_map_data() -> MapData:
 
 func _on_entities_new_entity(entity: Entity) -> void:
 	entities.append(entity)
-	
-func _on_entity_removed(entity: Entity):
-	var index = entities.rfind(entity)
-	entities.remove_at(index)
+
+func _on_entities_removed_entity(entity: Entity) -> void:
+	entities.erase(entity)

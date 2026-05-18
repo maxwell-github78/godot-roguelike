@@ -3,7 +3,7 @@ extends RefCounted
 
 var dir_path_string: String = "res://assets/definitions/tiles"
 
-
+const entity_pathfinding_weight = 10.0
 var width: int
 var height: int
 var tiles: Array[Tile]
@@ -11,6 +11,7 @@ var entities: Array[Entity]
 var tile_types: Dictionary
 var floor_grid_positions: Array[Vector2i]
 var player_start_position: Vector2i 
+var pathfinder: AStarGrid2D
 
 
 func _init(map_width: int, map_height: int) -> void:
@@ -57,3 +58,22 @@ func get_blocking_entity_at_location(grid_position: Vector2i) -> Entity:
 		if entity.is_blocking_movement() and entity.grid_position == grid_position:
 			return entity
 	return null
+
+func setup_pathfinding() -> void:
+	pathfinder = AStarGrid2D.new()
+	pathfinder.region = Rect2i(0, 0, width, height)
+	pathfinder.update()
+	for y in height:
+		for x in width:
+			var grid_position := Vector2i(x, y)
+			var tile: Tile = get_tile(grid_position)
+			pathfinder.set_point_solid(grid_position, not tile.is_walkable())
+	for entity in entities:
+		if entity.is_blocking_movement():
+			register_blocking_entity(entity)
+
+func register_blocking_entity(entity: Entity) -> void:
+	pathfinder.set_point_weight_scale(entity.grid_position, entity_pathfinding_weight)
+
+func unregister_blocking_entity(entity: Entity) -> void:
+	pathfinder.set_point_weight_scale(entity.grid_position, 0)
