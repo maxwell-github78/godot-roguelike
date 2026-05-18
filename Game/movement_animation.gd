@@ -4,7 +4,7 @@ extends Object
 var game: Game
 var start_grid_position: Vector2i
 var end_grid_position: Vector2i
-var entity: Entity
+var target: Entity
 var interrupt: bool
 var make_afterimage: bool
 var tween: Tween
@@ -12,16 +12,14 @@ var tiles: MapData
 var image: Sprite2D
 
 
-func _init(in_tween: Tween, in_entity: Entity, start: Vector2i, destination: Vector2i, interruption: bool, afterimage: bool):
+func _init(in_game: Game, in_tween: Tween, entity: Entity, start: Vector2i, destination: Vector2i, interruption: bool, afterimage: bool):
+	game = in_game
 	start_grid_position = start
 	end_grid_position = destination
-	entity = in_entity
+	target = entity
 	interrupt = interruption
 	make_afterimage = afterimage
 	tween = in_tween
-
-func add(in_game: Game):
-	game = in_game
 	tiles = game.get_map_data()
 	entity.add_animation(self)
 
@@ -33,7 +31,7 @@ func draw_afterimage():
 	if tiles.get_tile(start_grid_position).is_in_view or tiles.get_tile(end_grid_position).is_in_view:
 		image = Sprite2D.new()
 		game.map.animation_sprites.add_child(image)
-		image.texture = entity.get_entity_texture()
+		image.texture = target.get_entity_texture()
 		image.position = Grid.grid_to_world(start_grid_position)
 		image.centered = false
 		var fade_tween = image.create_tween()
@@ -56,9 +54,9 @@ func play():
 	
 func visibility():
 	if tiles.get_tile(start_grid_position).is_in_view or tiles.get_tile(end_grid_position).is_in_view:
-		entity.visible = true
+		target.visible = true
 	else:
-		entity.visible = false
+		target.visible = false
 
 func _tween_finished():
 	game.interruptions -= 1

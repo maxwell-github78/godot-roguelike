@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://baj2tbvwujnsh" path="res://Game/game.gd" id="1_bk3v5"]
 [ext_resource type="Script" uid="uid://b2221nolllmit" path="res://Map/map.gd" id="2_7raqb"]
-[ext_resource type="Script" uid="uid://bhdudjg8jexxr" path="res://Game/input_handler.gd" id="3_7raqb"]
+[ext_resource type="Script" uid="uid://bhdudjg8jexxr" path="res://Game/event_handler.gd" id="3_7raqb"]
 [ext_resource type="Script" uid="uid://c5mfpchya1hfk" path="res://Map/dungeon_generator.gd" id="4_jcm6v"]
 [ext_resource type="Script" uid="uid://cv4gcne0coebp" path="res://Map/tile_generator.gd" id="4_kul4i"]
 [ext_resource type="Script" uid="uid://l6mwn3et1kcx" path="res://Map/field_of_view.gd" id="4_qmv3x"]
@@ -39,7 +39,7 @@ script = ExtResource("7_fsxsm")
 
 [node name="AnimationSprites" type="Node2D" parent="Map" unique_id=1644393324]
 
-[node name="InputHandler" type="Node" parent="." unique_id=1280670172]
+[node name="EventHandler" type="Node" parent="." unique_id=1280670172]
 script = ExtResource("3_7raqb")
 
 [node name="Behaviour" type="Node" parent="." unique_id=1703277660]

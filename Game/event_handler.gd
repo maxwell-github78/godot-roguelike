@@ -1,22 +1,22 @@
-class_name InputHandler
+class_name EventHandler
 extends Node
 
+@onready var game: Game = get_parent()
 
-func get_action(player: Entity) -> Action:
+func get_action() -> Action:
 	var action: Action = null
 	
 	if Input.is_action_just_pressed("ui_up"):
-		action = BumpAction.new(player, 0, -1)
+		action = BumpAction.new(0, -1)
 	elif Input.is_action_just_pressed("ui_down"):
-		action = BumpAction.new(player, 0, 1)
+		action = BumpAction.new(0, 1)
 	elif Input.is_action_just_pressed("ui_left"):
-		action = BumpAction.new(player, -1, 0)
+		action = BumpAction.new(-1, 0)
 	elif Input.is_action_just_pressed("ui_right"):
-		action = BumpAction.new(player, 1, 0)
+		action = BumpAction.new(1, 0)
+	elif Input.is_action_just_pressed("ui_space"):
+		action = StandAction.new()
 	
-	elif Input.is_action_just_pressed("ui_cancel"):
-		action = EscapeAction.new(player)
-
 	elif Input.is_action_just_pressed("ui_click"):
 		var input_position: Vector2i = game.camera.get_global_mouse_position()
 		var map: MapData = game.get_map_data()

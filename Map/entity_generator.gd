@@ -38,7 +38,7 @@ func generate(dungeon: MapData, rng: RandomNumberGenerator):
 			if feature_number >= feature_weights[key][0] and feature_number <= feature_weights[key][1]:
 				feature_type = actor_types[key]
 				
-		entity = Entity.new(dungeon, grid_position, feature_type)
+		entity = Entity.new(game, grid_position, feature_type)
 		dungeon.entities.append(entity)
 		monster_count += 1
 	

@@ -23,7 +23,7 @@ var rng := RandomNumberGenerator.new()
 
 func _ready() -> void:
 	Engine.max_fps = 60
-	player = Entity.new(null, Vector2i.ZERO, player_definition)
+	player = Entity.new(self, Vector2i.ZERO, player_definition)
 	remove_child(camera)
 	player.add_child(camera)
 	
@@ -75,7 +75,7 @@ func _process(_delta: float) -> void:
 func _perform_action(action: Action, entity: Entity):
 	if action:
 		var previous_position := entity.grid_position
-		action.perform()
+		action.perform(self, entity)
 		if entity.grid_position != previous_position:
 			if entity.is_player_controlled:
 				map.update_fov(player.grid_position) #Does not handle multiple fields of view
@@ -85,16 +85,16 @@ func _perform_action(action: Action, entity: Entity):
 		return true
 	return false
 				
-func _player_action(entity: Entity) -> Action:
+func _player_action(entity: Entity) -> Event:
 	var action: Action = event_handler.get_action()
 	if action:
-		return action
+		return Event.new(action, entity)
 	return null
 
-func _npc_action(entity: Entity) -> Action:
+func _npc_action(entity: Entity) -> Event:
 	var action: Action = behaviour.get_action()
 	if action:
-		return action
+		return Event.new(action, entity)
 	return null
 	
 	
