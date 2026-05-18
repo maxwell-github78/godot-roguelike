@@ -28,13 +28,18 @@ func get_action() -> Action:
 	
 	if Input.is_action_just_pressed("ui_click"):
 		var input_position: Vector2i = game.camera.get_global_mouse_position()
-		var map: MapData = game.get_map_data()
-		var grid_position: Vector2i = Grid.world_to_grid(input_position)
-		var tile: Tile = map.get_tile_xy(grid_position.x, grid_position.y)
-		if tile.is_explored: 
-			var delta: Vector2i = grid_position - game.player.grid_position
-			action = BumpAction.new(delta.x, delta.y)
+		var map_data: MapData = game.get_map_data()
+		var target: Vector2i = Grid.world_to_grid(input_position)
+		var current = game.player_controlled_entity.grid_position
 		
+		var delta: Vector2i = target - current
+		if delta in input_directions.values():
+			action = BumpAction.new(delta.x, delta.y)
+		else:
+			var path := map_data.pathfinder.get_point_path(current, target)
+			var next = Vector2i(path[1])
+			var offset = next - current
+			action = BumpAction.new(offset.x, offset.y)
 			
 	
 	elif Input.is_action_just_pressed("ui_cancel"):
