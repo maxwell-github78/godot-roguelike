@@ -11,10 +11,11 @@ extends Node
 @onready var entity_generator: EntityGenerator = $EntityGenerator
 	
 func generate_dungeon(player: Entity, rng: RandomNumberGenerator) -> MapData:
-	var dungeon := MapData.new(map_width, map_height)
+	var dungeon := MapData.new(map_width, map_height, player)
 	
 	player.grid_position = player_start_position
 	player.position = Grid.grid_to_world(player.grid_position) #Prevent tween animation
+	player.map_data = dungeon
 	dungeon.entities.append(player)
 	
 	tile_generator.generate(dungeon, rng)

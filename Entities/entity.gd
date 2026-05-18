@@ -14,7 +14,7 @@ var shade := RandomNumberGenerator.new().randf()
 var animations: Array[MovementAnimation] = []
 var current_animation: MovementAnimation
 const max_number_tweens: int = 3
-var game: Game
+var map_data: MapData
 
 @export var movement_animation_time: float = 0.1
 
@@ -32,11 +32,12 @@ func set_entity_type(entity_definition: EntityDefinition) -> void:
 	team = _definition.team
 	enemy_teams = _definition.enemy_teams
 	
-func _init(in_game: Game, start_position: Vector2i, entity_definition: EntityDefinition) -> void:
+@warning_ignore("shadowed_variable")
+func _init(in_map_data: MapData, start_position: Vector2i, entity_definition: EntityDefinition) -> void:
 	centered = false
 	grid_position = start_position
 	position = Grid.grid_to_world(grid_position)
-	game = in_game
+	map_data = in_map_data
 	set_entity_type(entity_definition)
 	
 
@@ -77,7 +78,7 @@ func detect_afterimage() -> void:
 func _tween_finished() -> void:
 	if animations.is_empty():
 		current_animation.game.map.update_fov(current_animation.game.player.grid_position)
-		visible = current_animation.tiles.get_tile(grid_position).is_in_view
+		visible = map_data.get_tile(grid_position).is_in_view
 	current_animation = animations.pop_front()
 	if current_animation:
 		detect_afterimage()
@@ -90,7 +91,7 @@ func move(move_offset: Vector2i) -> void:
 	grid_position += move_offset
 	if blur:
 		position = Grid.grid_to_world(grid_position)
-		visible = game.get_map_data().get_tile(grid_position).is_in_view
+		visible = map_data.get_tile(grid_position).is_in_view
 		
 	
 	

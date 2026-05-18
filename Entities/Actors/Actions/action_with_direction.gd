@@ -4,9 +4,14 @@ extends Action
 var offset: Vector2i
 
 
-func _init(dx: int, dy: int) -> void:
+func _init(in_entity: Entity, dx: int, dy: int) -> void:
+	super._init(in_entity)
 	offset = Vector2i(dx, dy)
 
 
-func perform(_game: Game, _entity: Entity) -> void:
-	pass
+func get_destination() -> Vector2i:
+	return entity.grid_position + offset
+
+
+func get_blocking_entity_at_destination() -> Entity:
+	return get_map_data().get_blocking_entity_at_location(get_destination())
