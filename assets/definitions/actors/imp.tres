@@ -13,7 +13,6 @@ name = "Imp"
 texture = SubResource("AtlasTexture_e7kyi")
 speed = 75
 max_hp = 30
-damage = 5
 team = "monster"
 enemy_teams = Array[String](["player"])
 ai_type = 1

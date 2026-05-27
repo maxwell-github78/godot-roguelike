@@ -13,7 +13,7 @@ config_version=5
 config/name="roguelike"
 run/main_scene="uid://du7caag85bk8t"
 config/features=PackedStringArray("4.6", "GL Compatibility")
-config/icon="res://icon.svg"
+config/icon="res://Test/icon.svg"
 
 [autoload]
 

@@ -59,7 +59,6 @@ zoom_speed = 0.25
 
 [node name="Debug" type="Node" parent="." unique_id=726445166]
 script = ExtResource("7_oomkl")
-default_all_lit = true
 
 [connection signal="new_entity" from="Map/Entities" to="." method="_on_entities_new_entity"]
 [connection signal="removed_entity" from="Map/Entities" to="." method="_on_entities_removed_entity"]

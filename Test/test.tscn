@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://6lbwifwnhs1y"]
+
+[ext_resource type="Shader" uid="uid://duv8ic300skin" path="res://Test/disintegrate_shader.gdshader" id="1_jda1s"]
+[ext_resource type="Texture2D" uid="uid://cndehvpil7l60" path="res://assets/textures/colored-transparent_packed.png" id="2_jda1s"]
+[ext_resource type="Script" uid="uid://bq2y0b7rwxtei" path="res://Test/disintegrate.gd" id="3_su4bj"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_jda1s"]
+frequency = 0.1284
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_1ihti"]
+noise = SubResource("FastNoiseLite_jda1s")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6uqi0"]
+shader = ExtResource("1_jda1s")
+shader_parameter/noise_texture = SubResource("NoiseTexture2D_1ihti")
+shader_parameter/time = 0.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jda1s"]
+atlas = ExtResource("2_jda1s")
+region = Rect2(384, 144, 16, 16)
+
+[node name="Test" type="Node2D" unique_id=141219580]
+
+[node name="TestSprite" type="Sprite2D" parent="." unique_id=719972895]
+material = SubResource("ShaderMaterial_6uqi0")
+position = Vector2(413, 148)
+texture = SubResource("AtlasTexture_jda1s")
+script = ExtResource("3_su4bj")
+
+[node name="Camera2D" type="Camera2D" parent="TestSprite" unique_id=1266077695]

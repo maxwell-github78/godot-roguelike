@@ -31,15 +31,16 @@ func get_action() -> Action:
 		var map_data: MapData = game.get_map_data()
 		var target: Vector2i = Grid.world_to_grid(input_position)
 		var current = game.player_controlled_entity.grid_position
-		
-		var delta: Vector2i = target - current
-		if delta in input_directions.values():
-			action = BumpAction.new(delta.x, delta.y)
-		else:
-			var path := map_data.pathfinder.get_point_path(current, target)
-			var next = Vector2i(path[1])
-			var offset = next - current
-			action = BumpAction.new(offset.x, offset.y)
+		if map_data.get_tile(target).is_explored:
+			var delta: Vector2i = target - current
+			if delta in input_directions.values():
+				action = BumpAction.new(delta.x, delta.y)
+			else:
+				var path := map_data.pathfinder.get_point_path(current, target)
+				if path.size() > 1:
+					var next = Vector2i(path[1])
+					var offset = next - current
+					action = BumpAction.new(offset.x, offset.y)
 			
 	
 	elif Input.is_action_just_pressed("ui_cancel"):
