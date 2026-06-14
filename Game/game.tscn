@@ -11,6 +11,7 @@
 [ext_resource type="Script" uid="uid://h3e2bbsxsrdk" path="res://Game/entity_manager.gd" id="7_fsxsm"]
 [ext_resource type="Script" uid="uid://qlbb8spipex" path="res://Game/debug.gd" id="7_oomkl"]
 [ext_resource type="Script" uid="uid://crfhlycnauidr" path="res://Entities/Actors/behaviour.gd" id="8_7gi1t"]
+[ext_resource type="Script" uid="uid://dd1umm65jb1ph" path="res://Game/Event Animations/animation_sprites.gd" id="8_glinl"]
 
 [node name="Game" type="Node2D" unique_id=1953761449]
 script = ExtResource("1_bk3v5")
@@ -38,6 +39,7 @@ script = ExtResource("4_qmv3x")
 script = ExtResource("7_fsxsm")
 
 [node name="AnimationSprites" type="Node2D" parent="Map" unique_id=1644393324]
+script = ExtResource("8_glinl")
 
 [node name="InputHandler" type="Node" parent="." unique_id=1280670172]
 script = ExtResource("3_7raqb")

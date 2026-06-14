@@ -15,3 +15,4 @@ func perform(game: Game, entity: Entity) -> void:
 	tween.tween_property(entity, "position", Vector2(Grid.grid_to_world(entity.grid_position)), 0.1)
 	#print(entity.get_entity_name() + " kicks the %s, much to its annoyance!" % target.get_entity_name())
 	MovementAnimation.new(game, tween, entity, entity.grid_position, destination, true, false)
+	game.animation_sprites.make_tile_animation("base", destination)

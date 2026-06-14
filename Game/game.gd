@@ -7,6 +7,7 @@ const player_definition: EntityDefinition = preload("res://assets/definitions/ac
 @onready var input_handler: InputHandler = $InputHandler
 @onready var map: Map = $Map
 @onready var behaviour: Behaviour = $Behaviour
+@onready var animation_sprites: AnimationSprites = $Map/AnimationSprites
 
 var turn_queue: Array[Entity] = []
 var event_queue: Array[Event] = []
